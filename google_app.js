@@ -263,15 +263,36 @@ function getTableFromElement(element) {
   return data;
 }
 
-function getDataFromSheet() {
+function getDataFromSheet(startDate, endDate) {
   var sheet = SpreadsheetApp.openById('15zyvPCZ41jY6KRG_rpdnjpAd7JRiwd87xUjf1REH5NY').getSheetByName('Sheet1');
   var data = sheet.getDataRange().getValues();
-  return data;
+  
+  // Filter data based on date range
+  var filteredData = data.filter(row => {
+    var date = new Date(row[0]);
+    return date >= new Date(startDate) && date <= new Date(endDate);
+  });
+  
+  // Group data by date
+  var groupedData = {};
+  filteredData.forEach(row => {
+    var date = row[0];
+    if (!groupedData[date]) {
+      groupedData[date] = [];
+    }
+    groupedData[date].push(row);
+  });
+  
+  return groupedData;
 }
 
-function doGet() {
+function doGet(e) {
   var template = HtmlService.createTemplateFromFile('dashboard');
-  var data = getDataFromSheet();
+  var startDate = e.parameter.startDate || '2024-09-18';
+  var endDate = e.parameter.endDate || '2024-09-20';
+  var data = getDataFromSheet(startDate, endDate);
   template.data = data;
+  template.startDate = startDate;
+  template.endDate = endDate;
   return template.evaluate();
 }

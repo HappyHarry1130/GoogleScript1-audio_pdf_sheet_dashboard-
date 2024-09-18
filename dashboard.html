@@ -1,0 +1,156 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Employee Performance Report</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f4f4f9;
+            margin: 0;
+            padding: 0;
+        }
+        .container {
+            width: 90%;
+            margin: 0 auto;
+            background-color: #fff;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            border-radius: 8px;
+            overflow: hidden;
+        }
+        header {
+            background-color: #4CAF50;
+            color: white;
+            padding: 20px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        .header-left h1 {
+            margin: 0;
+        }
+        .header-left nav a {
+            color: white;
+            text-decoration: none;
+            margin-right: 10px;
+        }
+        .header-right span {
+            font-size: 1.2em;
+        }
+        main {
+            padding: 20px;
+        }
+        .schedule-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+        }
+        .schedule-header h2 {
+            margin: 0;
+        }
+        .date-range span {
+            font-size: 1.1em;
+            color: #555;
+        }
+        .controls button {
+            background-color: #4CAF50;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            margin-right: 10px;
+            cursor: pointer;
+            border-radius: 4px;
+        }
+        .controls button:hover {
+            background-color: #45a049;
+        }
+        .table-container {
+            overflow-x: auto;
+        }
+        .schedule-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-bottom: 20px;
+        }
+        .schedule-table th, .schedule-table td {
+            border: 1px solid #ddd;
+            padding: 8px;
+            text-align: center;
+        }
+        .schedule-table th {
+            background-color: #f2f2f2;
+            color: #333;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header>
+            <div class="header-left">
+                <h1>Employee Performance Report</h1>
+            </div>
+            <div class="header-right">
+                <span>Store_2</span>
+            </div>
+        </header>
+        <main>
+            <div class="schedule-header">
+                <h2>Performance Data</h2>
+                <div class="date-range">
+                    <form id="date-range-form">
+                        <label for="start-date">Start Date:</label>
+                        <input type="date" id="start-date" name="startDate" value="<?= startDate ?>">
+                        <label for="end-date">End Date:</label>
+                        <input type="date" id="end-date" name="endDate" value="<?= endDate ?>">
+                        <button type="submit">Update</button>
+                    </form>
+                </div>
+            </div>
+            <div class="table-container">
+                <table class="schedule-table">
+                    <thead>
+                        <tr>
+                            <th>Employee</th>
+                            <? for (var date in data) { ?>
+                                <th colspan="6"><?= new Date(date).toLocaleDateString() ?></th>
+                            <? } ?>
+                        </tr>
+                        <tr>
+                            <th></th>
+                            <? for (var date in data) { ?>
+                                <th>Accessories</th>
+                                <th>HSI</th>
+                                <th>Magenta</th>
+                                <th>Survey Rating</th>
+                                <th>Tablet/Add a Line</th>
+                                <th>Total</th>
+                            <? } ?>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>Employee</td>
+                            <? for (var date in data) { ?>
+                                <? for (var i = 0; i < 6; i++) { ?>
+                                    <td><?= data[date][i] ? data[date][i][2] : '' ?></td>
+                                <? } ?>
+                            <? } ?>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </main>
+    </div>
+    <script>
+        document.getElementById('date-range-form').addEventListener('submit', function(event) {
+            event.preventDefault();
+            var startDate = document.getElementById('start-date').value;
+            var endDate = document.getElementById('end-date').value;
+            var url = `?startDate=${startDate}&endDate=${endDate}`;
+            window.location.href = url;
+        });
+    </script>
+</body>
+</html>
